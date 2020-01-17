@@ -22,6 +22,7 @@ defmodule Uzi.Requests.BaseClient do
       plug Tesla.Middleware.FormUrlencoded
       plug Tesla.Middleware.DecodeJson
       plug Tesla.Middleware.Logger
+      plug Uzi.Requests.ErrorHandlerMiddleware
     end
   end
 end

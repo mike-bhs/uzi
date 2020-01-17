@@ -28,36 +28,21 @@ defmodule UziWeb.Endpoint do
     |> send_resp(200, Jason.encode!(%{status: :ok}))
   end
 
-  # params
-  # %{
-  #   tracking_id: "asdasd",
-  #   target_url: "asdasdas",
-  #   request_per_second_count: 2,
-  #   attemprs_count: 10,
-  #   payload: %{}
-  # }
   post "/send_requests" do
-    Logger.info("Received payload: #{inspect(conn.body_params)}")
-
-    response = Uzi.RequestSender.create_compliance_check(conn.body_params)
+    Uzi.RequestSender.create_compliance_check(conn.params)
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(response))
+    |> send_resp(200, Jason.encode!(%{message: "requests were sent"}))
   end
 
   post "/transaction_screening/:id/complete" do
     conn = put_resp_content_type(conn, "application/json")
 
-    case Uzi.Callbacks.Tss.complete_screening(conn.body_params) do
-      {:ok, _} ->
-        conn
-        |> send_resp(200, Jason.encode!(%{status: :success}))
+    Uzi.Callbacks.Tss.complete_screening(conn.params)
 
-      {:error, _error} ->
-        conn
-        |> send_resp(500, Jason.encode!(%{status: :internal_server_error}))
-    end
+    conn
+    |> send_resp(200, Jason.encode!(%{status: :success}))
   end
 
   match _ do

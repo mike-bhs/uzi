@@ -10,6 +10,6 @@ config :uzi, Uzi.Repo,
 
 config :uzi, ecto_repos: [Uzi.Repo]
 
-config :uzi, UziWeb.Endpoint, port: 8080
+config :uzi, UziWeb.Endpoint, port: 8081
 
 # import_config "#{Mix.env()}.exs"

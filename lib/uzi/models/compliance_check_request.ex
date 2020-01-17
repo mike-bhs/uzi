@@ -18,17 +18,13 @@ defmodule Uzi.Models.ComplianceCheckRequest do
   import Ecto.Changeset
 
   @create_fields [
-    :state,
     :tracking_id,
     :url,
     :payload,
-    :response,
     :sent_at
   ]
 
   @complete_fields [
-    :state,
-    :response,
     :screening_result,
     :completed_at,
     :duration_ms
@@ -53,16 +49,36 @@ defmodule Uzi.Models.ComplianceCheckRequest do
   def create(params) do
     __struct__()
     |> cast(params, @create_fields)
+    |> change(state: "new")
     |> Uzi.Repo.insert!()
+  end
+
+  def mark_pending(req, response) do
+    req
+    |> change(
+      state: "pending",
+      response: inspect(response)
+    )
+    |> Uzi.Repo.update!()
+  end
+
+  def mark_error(req, error) do
+    req
+    |> change(
+      state: "error",
+      response: inspect(error)
+    )
+    |> Uzi.Repo.update!()
   end
 
   def mark_completed(req, params) do
     req
     |> cast(params, @complete_fields)
-    |> Uzi.Repo.update()
+    |> change(state: "completed")
+    |> Uzi.Repo.update!()
   end
 
   def find_by_tracking_id(id) do
-    Uzi.Repo.get_by(__MODULE__, tracking_id: id)
+    Uzi.Repo.get_by!(__MODULE__, tracking_id: id)
   end
 end
