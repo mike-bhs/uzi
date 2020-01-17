@@ -26,6 +26,14 @@ defmodule Uzi.Models.ComplianceCheckRequest do
     :sent_at
   ]
 
+  @complete_fields [
+    :state,
+    :response,
+    :screening_result,
+    :completed_at,
+    :duration_ms
+  ]
+
   @primary_key {:id, Uzi.EctoTypes.UUID, autogenerate: true}
 
   schema "compliance_check_requests" do
@@ -46,6 +54,12 @@ defmodule Uzi.Models.ComplianceCheckRequest do
     __struct__()
     |> cast(params, @create_fields)
     |> Uzi.Repo.insert!()
+  end
+
+  def mark_completed(req, params) do
+    req
+    |> cast(params, @complete_fields)
+    |> Uzi.Repo.update()
   end
 
   def find_by_tracking_id(id) do
