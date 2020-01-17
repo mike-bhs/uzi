@@ -33,6 +33,7 @@ defmodule UziWeb.Endpoint do
   #   tracking_id: "asdasd",
   #   target_url: "asdasdas",
   #   request_per_second_count: 2,
+  #   attemprs_count: 10,
   #   payload: %{}
   # }
   post "/send_requests" do
@@ -43,6 +44,20 @@ defmodule UziWeb.Endpoint do
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(response))
+  end
+
+  post "/transaction_screening/:id/complete" do
+    conn = put_resp_content_type(conn, "application/json")
+
+    case TransactionScreening.complete_screening(conn.body_params) do
+      :ok ->
+        conn
+        |> send_resp(200, Jason.encode!(%{status: :success}))
+
+      {:error, _error} ->
+        conn
+        |> send_resp(500, Jason.encode!(%{status: :internal_server_error}))
+    end
   end
 
   match _ do
