@@ -28,6 +28,13 @@ defmodule UziWeb.Endpoint do
     |> send_resp(200, Jason.encode!(%{status: :ok}))
   end
 
+  # format
+  # {
+  #     "url": "some url",
+  #     "request_per_second_count": "20",
+  #     "duration_sec": "2",
+  #     "payload": {JSON}
+  # }
   post "/send_requests" do
     Uzi.RequestSender.create_compliance_check(conn.params)
 

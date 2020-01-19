@@ -4,7 +4,7 @@ defmodule Uzi.Requests.Tss do
   def create_compliance_check(%{
         "url" => url,
         "request_per_second_count" => req_per_sec_count,
-        "attempts_count" => attempts_count,
+        "duration_sec" => attempts_count,
         "payload" => payload
       }) do
     CreateComplianceCheck.run_async(
