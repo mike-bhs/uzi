@@ -1,4 +1,4 @@
-defmodule Uzi.EctoTypes.UUID do
+defmodule Uzi.Models.EctoTypeUUID do
   @type t :: Ecto.UUID.t()
 
   @behaviour Ecto.Type

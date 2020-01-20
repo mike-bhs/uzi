@@ -8,8 +8,9 @@
 ```
   {
     "url": "some url",
-    "request_per_second_count": "20",
-    "duration_sec": "2",
+    "requests_count": "20",
+    "iterations_count": "2",
+    "timeout_millisec": "15",
     "payload": {JSON}
   }
 ```

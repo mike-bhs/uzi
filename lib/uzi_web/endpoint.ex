@@ -46,7 +46,7 @@ defmodule UziWeb.Endpoint do
   post "/transaction_screening/:id/complete" do
     conn = put_resp_content_type(conn, "application/json")
 
-    Uzi.Callbacks.Tss.complete_screening(conn.params)
+    Uzi.Callbacks.CreateComplianceCheck.complete(conn.params)
 
     conn
     |> send_resp(200, Jason.encode!(%{status: :success}))
