@@ -1,21 +1,16 @@
 # Uzi
 
-**TODO: Add description**
+### Getting Started
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `uzi` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:uzi, "~> 0.1.0"}
-  ]
-end
+1. Create DB by running `mix do ecto.create, ecto.migrate`
+2. Start th server `mix run --no-halt`
+3. Send request to `localhost:8081/send_requests` with payload
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/uzi](https://hexdocs.pm/uzi).
-
+  {
+    "url": "some url",
+    "requests_count": "20",
+    "iterations_count": "2",
+    "timeout_millisec": "15",
+    "payload": {JSON}
+  }
+```

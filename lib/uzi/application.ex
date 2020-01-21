@@ -8,6 +8,8 @@ defmodule Uzi.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      Uzi.Repo,
+      UziWeb.Endpoint
       # Starts a worker by calling: Uzi.Worker.start_link(arg)
       # {Uzi.Worker, arg}
     ]
