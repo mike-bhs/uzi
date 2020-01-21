@@ -12,4 +12,6 @@ config :uzi, ecto_repos: [Uzi.Repo]
 
 config :uzi, UziWeb.Endpoint, port: 8081
 
+config :uzi, :callbacks, host: "localhost", port: 8081
+
 # import_config "#{Mix.env()}.exs"
