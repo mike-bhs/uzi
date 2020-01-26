@@ -7,6 +7,8 @@ defmodule Uzi.Requests.BaseClient do
       plug Tesla.Middleware.FormUrlencoded
       plug Tesla.Middleware.DecodeJson
       plug Tesla.Middleware.Logger
+      # interrupt request by timeout if it took more than 6 sec
+      plug Tesla.Middleware.Timeout, timeout: 6_000
       plug Uzi.Requests.BaseClient.ErrorHandlerMiddleware
     end
   end
