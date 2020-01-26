@@ -31,8 +31,9 @@ defmodule UziWeb.Endpoint do
   # format
   # {
   #     "url": "some url",
-  #     "request_per_second_count": "20",
-  #     "duration_sec": "2",
+  #     "threads_count": "4",
+  #     "requests_per_thread_count": "10",
+  #     "timeout_between_requests_millisec": "1000",
   #     "payload": {JSON}
   # }
   post "/send_requests" do

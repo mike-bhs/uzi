@@ -1,36 +1,30 @@
 defmodule Uzi.Requests.Producer do
   require Logger
 
-  def run_async(req_info, req_module) do
-    {:ok, _pid} = Task.start(__MODULE__, :run, [req_info, req_module])
+  def receive_messages() do
+    receive do
+      {:send_request, req_info, req_module, req_count} ->
+        if req_count > 0 do
+          {:ok, _pid} = Task.start(req_module, :send_request, [req_info.url, req_info.payload])
+          message = {:send_request, req_info, req_module, req_count - 1}
+          Process.send_after(self(), message, req_info.timeout_between_requests_millisec)
 
-    :ok
+          receive_messages()
+        else
+          Logger.info("Current thread successfully sent all requests")
+        end
+
+      message ->
+        Logger.error("Received unexpected message #{inspect(message)}")
+        receive_messages()
+    end
   end
 
   def run(req_info, req_module) do
-    if req_info.iterations_count <= 0 do
-      Logger.info("Successfully sent all requests to #{req_info.url}")
-    else
-      send_req_recursive(req_info, req_module)
+    Enum.each(1..req_info.threads_count, fn _ ->
+      {:ok, pid} = Task.start(__MODULE__, :receive_messages, [])
 
-      Process.sleep(req_info.timeout_millisec)
-
-      req_info
-      |> decrement_iterations_count()
-      |> run(req_module)
-    end
+      send(pid, {:send_request, req_info, req_module, req_info.requests_per_thread_count})
+    end)
   end
-
-  defp send_req_recursive(req_info, req_module) do
-    if req_info.requests_count > 0 do
-      {:ok, _pid} = Task.start(req_module, :send_request, [req_info.url, req_info.payload])
-
-      req_info
-      |> decrement_requests_count()
-      |> send_req_recursive(req_module)
-    end
-  end
-
-  defp decrement_iterations_count(req_info), do: %{req_info | iterations_count: req_info.iterations_count - 1}
-  defp decrement_requests_count(req_info), do: %{req_info | requests_count: req_info.requests_count - 1}
 end

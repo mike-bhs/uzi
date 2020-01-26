@@ -7,6 +7,7 @@ defmodule Uzi.Requests.BaseClient do
       plug Tesla.Middleware.FormUrlencoded
       plug Tesla.Middleware.DecodeJson
       plug Tesla.Middleware.Logger
+      plug Tesla.Middleware.Timeout, Application.get_env(:uzi, :outgoing_requests) |> Keyword.get(:timeout_millisec)
       plug Uzi.Requests.BaseClient.ErrorHandlerMiddleware
     end
   end

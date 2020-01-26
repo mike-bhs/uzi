@@ -8,6 +8,7 @@ defmodule Uzi.Requests.CreateComplianceCheck do
     req_payload = merge_dynamic_fields(payload)
     req_record = Request.create(url, payload, req_payload["source_id"])
 
+    Logger.info("Sending request to #{url} ...")
     case post(url, req_payload, []) do
       {:ok, %{body: response}} ->
         Request.mark_pending(req_record, response)
@@ -18,14 +19,17 @@ defmodule Uzi.Requests.CreateComplianceCheck do
   end
 
   defp merge_dynamic_fields(payload) do
-    config = Application.get_env(:uzi, :callbacks)
+    host = Application.get_env(:uzi, :callbacks) |> Keyword.get(:reply_to_host)
+    port = Application.get_env(:uzi, UziWeb.Endpoint) |> Keyword.get(:port)
+
     source_id = Ecto.UUID.generate()
+    transaction_id = Ecto.UUID.generate()
 
     dynamic_data = %{
       "source_id" => source_id,
-      "transaction_id" => Ecto.UUID.generate(),
+      "transaction_id" => transaction_id,
       "short_reference" => generate_short_reference(),
-      "reply_to" => "http://#{config[:host]}:#{config[:port]}/transaction_screening/#{source_id}/complete"
+      "reply_to" => "http://#{host}:#{port}/transaction_screening/#{source_id}/complete"
     }
 
     Map.merge(payload, dynamic_data)
