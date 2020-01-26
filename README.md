@@ -8,9 +8,9 @@
 ```
   {
     "url": "some url",
-    "requests_count": "20",
-    "iterations_count": "2",
-    "timeout_millisec": "15",
+    "threads_count": "4",
+    "requests_per_thread_count": "10",
+    "timeout_between_requests_millisec": "3500",
     "payload": {JSON}
   }
 ```

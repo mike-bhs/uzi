@@ -4,6 +4,6 @@ defmodule Uzi.RequestSender do
   def create_compliance_check(params) do
     params
     |> Uzi.Requests.Info.new()
-    |> Producer.run_async(CreateComplianceCheck)
+    |> Producer.run(CreateComplianceCheck)
   end
 end
